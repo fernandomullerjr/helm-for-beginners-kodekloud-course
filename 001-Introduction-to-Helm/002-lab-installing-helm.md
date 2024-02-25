@@ -504,3 +504,332 @@ E: The repository 'https://download.opensuse.org/repositories/devel:/kubic:/libc
 N: Updating from such a repository can't be done securely, and is therefore disabled by default.
 N: See apt-secure(8) manpage for repository creation and user configuration details.
 E: The repository 'http://ppa.launchpad.net/webupd8team/y-ppa-manager/ubuntu noble Release' does not have a Release file.
+
+
+
+
+
+<https://linuxsimply.com/linux-basics/package-management/update-packages/apt-get-update-not-working/>
+
+root@debian10x64:/etc# rm /etc/apt/sources.list.d/*
+root@debian10x64:/etc# sudo apt-get clean
+root@debian10x64:/etc#
+root@debian10x64:/etc#
+root@debian10x64:/etc#
+root@debian10x64:/etc#
+root@debian10x64:/etc# apt update
+Get:1 https://download.docker.com/linux/debian buster InRelease [53.9 kB]
+Hit:2 http://security.debian.org/debian-security buster/updates InRelease
+Hit:3 http://deb.debian.org/debian buster InRelease
+Hit:4 http://deb.debian.org/debian buster-updates InRelease
+Fetched 53.9 kB in 1s (52.2 kB/s)
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+77 packages can be upgraded. Run 'apt list --upgradable' to see them.
+root@debian10x64:/etc#
+root@debian10x64:/etc#
+root@debian10x64:/etc#
+root@debian10x64:/etc#
+root@debian10x64:/etc#
+root@debian10x64:/etc#
+root@debian10x64:/etc# apt remove containerd
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+Note, selecting 'containerd.io' instead of 'containerd'
+The following packages were automatically installed and are no longer required:
+  docker-ce-rootless-extras docker-scan-plugin libevent-core-2.1-6 libevent-pthreads-2.1-6 libopts25 sntp xdg-desktop-portal xdg-desktop-portal-gtk
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 77 not upgraded.
+root@debian10x64:/etc#
+
+
+
+
+disable-pull-on-run: false
+root@debian10x64:/etc# ls /var/run/
+avahi-daemon  chronyd.pid    containers  crond.reboot  dhclient.ens33.pid  docker  gdm3.pid   ipcns  lvm           mysqld   NetworkManager  pidns            reboot-required.pkgs  snapd-snap.socket  sshd      systemd     udisks2  utmp
+blkid         console-setup  crio        cups          dmeventd-client     fsck    initctl    lock   motd.dynamic  netns    newrelic-infra  plymouth         sendsigs.omit.d       snapd.socket       sshd.pid  tmpfiles.d  user     utsns
+chrony        containerd     crond.pid   dbus          dmeventd-server     gdm3    initramfs  log    mount         network  nginx.pid       reboot-required  shm                   speech-dispatcher  sudo      udev        userns
+root@debian10x64:/etc# ls /var/run/crio/
+crio.sock  exec-pid-dir  exits  version
+root@debian10x64:/etc# ls /var/run/crio/
+crio.sock     exec-pid-dir/ exits/        version
+root@debian10x64:/etc# ls /var/run/crio/crio.sock
+/var/run/crio/crio.sock
+root@debian10x64:/etc#
+root@debian10x64:/etc#
+root@debian10x64:/etc#
+root@debian10x64:/etc# ls /var/run/crio/crio.sock ^C
+root@debian10x64:/etc# vi /etc/crictl.yaml
+root@debian10x64:/etc#
+root@debian10x64:/etc#
+root@debian10x64:/etc#
+root@debian10x64:/etc# sudo crictl info
+{
+  "status": {
+    "conditions": [
+      {
+        "type": "RuntimeReady",
+        "status": true,
+        "reason": "",
+        "message": ""
+      },
+      {
+        "type": "NetworkReady",
+        "status": true,
+        "reason": "",
+        "message": ""
+      }
+    ]
+  }
+}
+root@debian10x64:/etc# systemctl status crio
+● crio.service - Container Runtime Interface for OCI (CRI-O)
+   Loaded: loaded (/lib/systemd/system/crio.service; enabled; vendor preset: enabled)
+   Active: active (running) since Sun 2024-02-25 13:18:10 -03; 1min 51s ago
+     Docs: https://github.com/cri-o/cri-o
+ Main PID: 85624 (crio)
+    Tasks: 12
+   Memory: 27.3M
+   CGroup: /system.slice/crio.service
+           └─85624 /usr/bin/crio
+
+Feb 25 13:18:10 debian10x64 crio[85624]: time="2024-02-25 13:18:10.713547985-03:00" level=info msg="No seccomp profile specified, using the internal default"
+Feb 25 13:18:10 debian10x64 crio[85624]: time="2024-02-25 13:18:10.713555415-03:00" level=info msg="Installing default AppArmor profile: crio-default"
+Feb 25 13:18:10 debian10x64 crio[85624]: time="2024-02-25 13:18:10.728831071-03:00" level=info msg="No blockio config file specified, blockio not configured"
+Feb 25 13:18:10 debian10x64 crio[85624]: time="2024-02-25 13:18:10.728859502-03:00" level=info msg="RDT not available in the host system"
+Feb 25 13:18:10 debian10x64 crio[85624]: time="2024-02-25 13:18:10.745333126-03:00" level=info msg="Found CNI network cilium (type=cilium-cni) at /etc/cni/net.d/05-cilium.conflist"
+Feb 25 13:18:10 debian10x64 crio[85624]: time="2024-02-25 13:18:10.759979165-03:00" level=info msg="Found CNI network crio (type=bridge) at /etc/cni/net.d/100-crio-bridge.conf"
+Feb 25 13:18:10 debian10x64 crio[85624]: time="2024-02-25 13:18:10.761795540-03:00" level=info msg="Found CNI network 200-loopback.conf (type=loopback) at /etc/cni/net.d/200-loopback.conf"
+Feb 25 13:18:10 debian10x64 crio[85624]: time="2024-02-25 13:18:10.761821190-03:00" level=info msg="Updated default CNI network name to cilium"
+Feb 25 13:18:10 debian10x64 crio[85624]: time="2024-02-25 13:18:10.766731028-03:00" level=warning msg="Error encountered when checking whether cri-o should wipe images: version file /var/lib/crio/version not found: open /var/lib/crio/version: no such file or directory"
+Feb 25 13:18:10 debian10x64 systemd[1]: Started Container Runtime Interface for OCI (CRI-O).
+root@debian10x64:/etc#
+
+
+
+
+root@debian10x64:/etc# systemctl status crio
+● crio.service - Container Runtime Interface for OCI (CRI-O)
+   Loaded: loaded (/lib/systemd/system/crio.service; enabled; vendor preset: enabled)
+   Active: active (running) since Sun 2024-02-25 13:20:14 -03; 11s ago
+     Docs: https://github.com/cri-o/cri-o
+ Main PID: 86033 (crio)
+    Tasks: 11
+   Memory: 22.1M
+   CGroup: /system.slice/crio.service
+           └─86033 /usr/bin/crio
+
+Feb 25 13:20:14 debian10x64 crio[86033]: time="2024-02-25 13:20:14.847970763-03:00" level=info msg="Conmon does support the --log-global-size-max option"
+Feb 25 13:20:14 debian10x64 crio[86033]: time="2024-02-25 13:20:14.847997653-03:00" level=info msg="No seccomp profile specified, using the internal default"
+Feb 25 13:20:14 debian10x64 crio[86033]: time="2024-02-25 13:20:14.848002513-03:00" level=info msg="Installing default AppArmor profile: crio-default"
+Feb 25 13:20:14 debian10x64 crio[86033]: time="2024-02-25 13:20:14.861193887-03:00" level=info msg="No blockio config file specified, blockio not configured"
+Feb 25 13:20:14 debian10x64 crio[86033]: time="2024-02-25 13:20:14.861205357-03:00" level=info msg="RDT not available in the host system"
+Feb 25 13:20:14 debian10x64 crio[86033]: time="2024-02-25 13:20:14.878428887-03:00" level=info msg="Found CNI network cilium (type=cilium-cni) at /etc/cni/net.d/05-cilium.conflist"
+Feb 25 13:20:14 debian10x64 crio[86033]: time="2024-02-25 13:20:14.881280486-03:00" level=info msg="Found CNI network crio (type=bridge) at /etc/cni/net.d/100-crio-bridge.conf"
+Feb 25 13:20:14 debian10x64 crio[86033]: time="2024-02-25 13:20:14.882659541-03:00" level=info msg="Found CNI network 200-loopback.conf (type=loopback) at /etc/cni/net.d/200-loopback.conf"
+Feb 25 13:20:14 debian10x64 crio[86033]: time="2024-02-25 13:20:14.882681531-03:00" level=info msg="Updated default CNI network name to cilium"
+Feb 25 13:20:14 debian10x64 systemd[1]: Started Container Runtime Interface for OCI (CRI-O).
+root@debian10x64:/etc# date
+Sun 25 Feb 2024 01:20:27 PM -03
+root@debian10x64:/etc#
+
+
+
+
+root@debian10x64:/etc#
+root@debian10x64:/etc# crictl ps
+CONTAINER           IMAGE               CREATED             STATE               NAME                ATTEMPT             POD ID              POD
+root@debian10x64:/etc# crictl pods
+POD ID              CREATED             STATE               NAME                NAMESPACE           ATTEMPT             RUNTIME
+root@debian10x64:/etc# date
+Sun 25 Feb 2024 01:20:39 PM -03
+root@debian10x64:/etc#
+
+
+
+
+
+root@debian10x64:/etc# kubeadm reset
+W0225 13:20:49.526227   86205 preflight.go:56] [reset] WARNING: Changes made to this host by 'kubeadm init' or 'kubeadm join' will be reverted.
+[reset] Are you sure you want to proceed? [y/N]: y
+[preflight] Running pre-flight checks
+W0225 13:20:51.031395   86205 removeetcdmember.go:106] [reset] No kubeadm config, using etcd pod spec to get data directory
+[reset] Stopping the kubelet service
+[reset] Unmounting mounted directories in "/var/lib/kubelet"
+[reset] Deleting contents of directories: [/etc/kubernetes/manifests /var/lib/kubelet /etc/kubernetes/pki]
+[reset] Deleting files: [/etc/kubernetes/admin.conf /etc/kubernetes/kubelet.conf /etc/kubernetes/bootstrap-kubelet.conf /etc/kubernetes/controller-manager.conf /etc/kubernetes/scheduler.conf]
+
+The reset process does not clean CNI configuration. To do so, you must remove /etc/cni/net.d
+
+The reset process does not reset or clean up iptables rules or IPVS tables.
+If you wish to reset iptables, you must do so manually by using the "iptables" command.
+
+If your cluster was setup to utilize IPVS, run ipvsadm --clear (or similar)
+to reset your system's IPVS tables.
+
+The reset process does not clean your kubeconfig files and you must remove them manually.
+Please, check the contents of the $HOME/.kube/config file.
+root@debian10x64:/etc#
+
+
+
+
+- OK kubeadm init agora
+
+~~~~bash
+
+root@debian10x64:/etc# kubeadm init
+I0225 13:21:11.035436   86253 version.go:256] remote version is much newer: v1.29.2; falling back to: stable-1.28
+[init] Using Kubernetes version: v1.28.7
+[preflight] Running pre-flight checks
+        [WARNING SystemVerification]: missing optional cgroups: hugetlb
+[preflight] Pulling images required for setting up a Kubernetes cluster
+[preflight] This might take a minute or two, depending on the speed of your internet connection
+[preflight] You can also perform this action in beforehand using 'kubeadm config images pull'
+[certs] Using certificateDir folder "/etc/kubernetes/pki"
+[certs] Generating "ca" certificate and key
+[certs] Generating "apiserver" certificate and key
+[certs] apiserver serving cert is signed for DNS names [debian10x64 kubernetes kubernetes.default kubernetes.default.svc kubernetes.default.svc.cluster.local] and IPs [10.96.0.1 192.168.136.128]
+[certs] Generating "apiserver-kubelet-client" certificate and key
+[certs] Generating "front-proxy-ca" certificate and key
+[certs] Generating "front-proxy-client" certificate and key
+[certs] Generating "etcd/ca" certificate and key
+[certs] Generating "etcd/server" certificate and key
+[certs] etcd/server serving cert is signed for DNS names [debian10x64 localhost] and IPs [192.168.136.128 127.0.0.1 ::1]
+[certs] Generating "etcd/peer" certificate and key
+[certs] etcd/peer serving cert is signed for DNS names [debian10x64 localhost] and IPs [192.168.136.128 127.0.0.1 ::1]
+[certs] Generating "etcd/healthcheck-client" certificate and key
+[certs] Generating "apiserver-etcd-client" certificate and key
+[certs] Generating "sa" key and public key
+[kubeconfig] Using kubeconfig folder "/etc/kubernetes"
+[kubeconfig] Writing "admin.conf" kubeconfig file
+[kubeconfig] Writing "kubelet.conf" kubeconfig file
+[kubeconfig] Writing "controller-manager.conf" kubeconfig file
+[kubeconfig] Writing "scheduler.conf" kubeconfig file
+[etcd] Creating static Pod manifest for local etcd in "/etc/kubernetes/manifests"
+[control-plane] Using manifest folder "/etc/kubernetes/manifests"
+[control-plane] Creating static Pod manifest for "kube-apiserver"
+[control-plane] Creating static Pod manifest for "kube-controller-manager"
+[control-plane] Creating static Pod manifest for "kube-scheduler"
+[kubelet-start] Writing kubelet environment file with flags to file "/var/lib/kubelet/kubeadm-flags.env"
+[kubelet-start] Writing kubelet configuration to file "/var/lib/kubelet/config.yaml"
+[kubelet-start] Starting the kubelet
+[wait-control-plane] Waiting for the kubelet to boot up the control plane as static Pods from directory "/etc/kubernetes/manifests". This can take up to 4m0s
+[apiclient] All control plane components are healthy after 13.002174 seconds
+[upload-config] Storing the configuration used in ConfigMap "kubeadm-config" in the "kube-system" Namespace
+[kubelet] Creating a ConfigMap "kubelet-config" in namespace kube-system with the configuration for the kubelets in the cluster
+[upload-certs] Skipping phase. Please see --upload-certs
+[mark-control-plane] Marking the node debian10x64 as control-plane by adding the labels: [node-role.kubernetes.io/control-plane node.kubernetes.io/exclude-from-external-load-balancers]
+[mark-control-plane] Marking the node debian10x64 as control-plane by adding the taints [node-role.kubernetes.io/control-plane:NoSchedule]
+[bootstrap-token] Using token: jdfg8g.sirk72qkctgrbn06
+[bootstrap-token] Configuring bootstrap tokens, cluster-info ConfigMap, RBAC Roles
+[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to get nodes
+[bootstrap-token] Configured RBAC rules to allow Node Bootstrap tokens to post CSRs in order for nodes to get long term certificate credentials
+[bootstrap-token] Configured RBAC rules to allow the csrapprover controller automatically approve CSRs from a Node Bootstrap Token
+[bootstrap-token] Configured RBAC rules to allow certificate rotation for all node client certificates in the cluster
+[bootstrap-token] Creating the "cluster-info" ConfigMap in the "kube-public" namespace
+[kubelet-finalize] Updating "/etc/kubernetes/kubelet.conf" to point to a rotatable kubelet client certificate and key
+[addons] Applied essential addon: CoreDNS
+[addons] Applied essential addon: kube-proxy
+
+Your Kubernetes control-plane has initialized successfully!
+
+To start using your cluster, you need to run the following as a regular user:
+
+  mkdir -p $HOME/.kube
+  sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+  sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+Alternatively, if you are the root user, you can run:
+
+  export KUBECONFIG=/etc/kubernetes/admin.conf
+
+You should now deploy a pod network to the cluster.
+Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
+  https://kubernetes.io/docs/concepts/cluster-administration/addons/
+
+Then you can join any number of worker nodes by running the following on each as root:
+
+kubeadm join 192.168.136.128:6443 --token jdfg8g.sirk72qkctgrbn06 \
+        --discovery-token-ca-cert-hash  
+root@debian10x64:/etc#
+
+~~~~
+
+
+
+
+## SOLUÇÃO
+
+1. Desinstalar o containerd, parar os Pods que estavam up no containerd.
+
+2. Instalar o cri-o no Debian:
+
+<https://computingforgeeks.com/install-cri-o-container-runtime-on-debian-linux/>
+
+  636  sudo apt update && sudo apt -y upgrade
+  637  OS=Debian_10
+  638  CRIO_VERSION=1.23
+  639  echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/ /"|sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+  640  echo "deb http://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable:/cri-o:/$CRIO_VERSION/$OS/ /"|sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable:cri-o:$CRIO_VERSION.list
+  641  curl -L https://download.opensuse.org/repositories/devel:kubic:libcontainers:stable:cri-o:$CRIO_VERSION/$OS/Release.key | sudo apt-key add -
+  642  curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/$OS/Release.key | sudo apt-key add -
+  643  sudo apt update
+  644  sudo apt upgrade
+  645  sudo apt install cri-o cri-o-runc
+  646  cat /etc/crictl.yaml
+  647  sudo apt install cri-o cri-o-runc
+  648  sudo apt remove cri-o cri-o-runc
+  649  sudo apt install cri-o cri-o-runc
+  650  sudo systemctl start crio.service
+  651  sudo systemctl enable crio.service
+  652  systemctl status crio
+  653  sudo apt install cri-tools
+  654  sudo crictl info
+  655  cat /etc/crictl.yaml
+  656  ls /var/run/
+  657  ls /var/run/crio/
+  658  ls /var/run/crio/crio.sock
+  659  vi /etc/crictl.yaml
+  660  sudo crictl info
+  661  systemctl status crio
+  662  systemctl restart crio
+  663  systemctl status crio
+  664  systemctl status crio
+  665  date
+  666  crictl ps
+  667  crictl pods
+  668  date
+  669  kubeadm reset
+  670  kubeadm init
+
+
+
+
+
+
+
+
+
+
+root@debian10x64:/etc#
+root@debian10x64:/etc# kubectl get nodes
+NAME          STATUS   ROLES           AGE    VERSION
+debian10x64   Ready    control-plane   103s   v1.28.1
+root@debian10x64:/etc# helm ls -a
+NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+root@debian10x64:/etc# helm ls -A
+NAME    NAMESPACE       REVISION        UPDATED STATUS  CHART   APP VERSION
+root@debian10x64:/etc#
+
+
+
+
+# ###################################################################################################################### 
+# ###################################################################################################################### 
+## PENDENTE
+
+- Seguir lab de Helm, instalação e validação.
