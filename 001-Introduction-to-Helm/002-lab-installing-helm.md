@@ -833,3 +833,125 @@ root@debian10x64:/etc#
 ## PENDENTE
 
 - Seguir lab de Helm, instalação e validação.
+
+
+
+
+
+
+- Seguir lab de Helm, instalação e validação.
+
+<https://kodekloud.com/topic/lab-installing-helm/>
+
+
+You must have Kubernetes installed for a successful and properly secured use of Helm.
+
+Refer the documentation to check the prerequisites. The Documentation tab is available at the top right panel.
+
+
+
+<https://helm.sh/docs/intro/install/>
+
+$ curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+$ chmod 700 get_helm.sh
+$ ./get_helm.sh
+
+
+
+
+Install the helm package on the controlplane node.
+
+If unsure how to install the helm tool, feel free to refer to the documentation. The Documentation tab is available at the top right panel.
+
+
+
+Note: Make sure to complete the installation process before moving to the next questions.
+
+Helm installed Successfully?
+
+
+
+controlplane ~ ➜  helm version
+version.BuildInfo{Version:"v3.14.2", GitCommit:"c309b6f0ff63856811846ce18f3bdc93d2b4d54b", GitTreeState:"clean", GoVersion:"go1.21.7"}
+
+controlplane ~ ➜  
+
+
+
+
+
+
+Which environment variable can be used to indicate whether or not Helm is running in Debug mode?
+
+Use the help mode of the helm command to look for this information.
+
+
+
+controlplane ~ ➜  helm -h | grep -i debug
+| $HELM_DEBUG                        | indicate whether or not Helm is running in Debug mode                                                      |
+      --debug                           enable verbose output
+
+controlplane ~ ➜  
+
+
+
+
+
+What is a command line flag that can be used to enable verbose output?
+
+
+
+Which of the following is not a valid subcommand to use with helm get command?
+
+
+controlplane ~ ➜  helm get -h
+
+This command consists of multiple subcommands which can be used to
+get extended information about the release, including:
+
+- The values used to generate the release
+- The generated manifest file
+- The notes provided by the chart of the release
+- The hooks associated with the release
+- The metadata of the release
+
+Usage:
+  helm get [command]
+
+Available Commands:
+  all         download all information for a named release
+  hooks       download all hooks for a named release
+  manifest    download the manifest for a named release
+  metadata    This command fetches metadata for a given release
+  notes       download the notes for a named release
+  values      download the values file for a named release
+
+Flags:
+  -h, --help   help for get
+
+Global Flags:
+      --burst-limit int                 client-side default throttling limit (default 100)
+      --debug                           enable verbose output
+      --kube-apiserver string           the address and the port for the Kubernetes API server
+      --kube-as-group stringArray       group to impersonate for the operation, this flag can be repeated to specify multiple groups.
+      --kube-as-user string             username to impersonate for the operation
+      --kube-ca-file string             the certificate authority file for the Kubernetes API server connection
+      --kube-context string             name of the kubeconfig context to use
+      --kube-insecure-skip-tls-verify   if true, the Kubernetes API server's certificate will not be checked for validity. This will make your HTTPS connections insecure
+      --kube-tls-server-name string     server name to use for Kubernetes API server certificate validation. If it is not provided, the hostname used to contact the server is used
+      --kube-token string               bearer token used for authentication
+      --kubeconfig string               path to the kubeconfig file
+  -n, --namespace string                namespace scope for this request
+      --qps float32                     queries per second used when communicating with the Kubernetes API, not including bursting
+      --registry-config string          path to the registry config file (default "/root/.config/helm/registry/config.json")
+      --repository-cache string         path to the file containing cached repository indexes (default "/root/.cache/helm/repository")
+      --repository-config string        path to the file containing repository names and URLs (default "/root/.config/helm/repositories.yaml")
+
+Use "helm get [command] --help" for more information about a command.
+
+controlplane ~ ➜  
+
+
+
+
+That's all for now. That was a quick introduction to the helm command line utility. Feel free to explore the helm command line utility further. We will learn more about these commands throughout the remainder of this course.
