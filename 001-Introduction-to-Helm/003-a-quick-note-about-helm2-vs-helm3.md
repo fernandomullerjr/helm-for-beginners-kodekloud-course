@@ -85,3 +85,11 @@ Limitações do 3-way merge:
 Recursos adicionais:
 
     Documentação do Helm 3: https://helm.sh/docs/helm/
+
+
+
+
+
+
+## PENDENTE
+- Continuar video.
